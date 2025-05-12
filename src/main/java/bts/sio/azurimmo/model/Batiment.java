@@ -1,32 +1,26 @@
 package bts.sio.azurimmo.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
 
-@Data
-@NoArgsConstructor
 @Entity
 @Table(name = "batiment")
-
 public class Batiment {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@Column(name="adresse")
-	private String adresse;
-	
-	@Column(name="ville")
-	private String ville;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	public Long getId() {
+    @Column(name = "adresse")
+    private String adresse;
+
+    @Column(name = "ville")
+    private String ville;
+
+    @Column(name = "nom")
+    private String nom;
+
+    // === Getters & Setters ===
+    public Long getId() {
         return id;
     }
 
@@ -50,9 +44,11 @@ public class Batiment {
         this.ville = ville;
     }
 
-	public static Batiment saveBatiment(Batiment batiment) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-}
+    public String getNom() {
+        return nom;
+    }
 
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+}
