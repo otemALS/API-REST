@@ -1,7 +1,11 @@
 package bts.sio.azurimmo.service;
 
 import bts.sio.azurimmo.model.Contrat;
+import bts.sio.azurimmo.model.Appartement;
+import bts.sio.azurimmo.model.Locataire;
 import bts.sio.azurimmo.repository.ContratRepository;
+import bts.sio.azurimmo.repository.AppartementRepository;
+import bts.sio.azurimmo.repository.LocataireRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +18,12 @@ public class ContratService {
     @Autowired
     private ContratRepository contratRepository;
 
+    @Autowired
+    private LocataireRepository locataireRepository;
+
+    @Autowired
+    private AppartementRepository appartementRepository;
+
     // 🔹 Récupérer tous les contrats
     public List<Contrat> getAllContrats() {
         return contratRepository.findAll();
@@ -24,11 +34,21 @@ public class ContratService {
         return contratRepository.findById(id);
     }
 
-    // 🔹 Créer un nouveau contrat
+    // 🔹 Créer un nouveau contrat avec appartement et locataire complets
     public Contrat createContrat(Contrat contrat) {
         if (contrat.getId() != null) {
-            contrat.setId(null); // sécurité : ID auto-généré
+            contrat.setId(null); // ID auto-généré
         }
+
+        // 🔸 Recharger les entités complètes à partir de leurs IDs
+        Locataire loc = locataireRepository.findById(contrat.getLocataire().getId())
+            .orElseThrow(() -> new RuntimeException("Locataire non trouvé"));
+        Appartement appart = appartementRepository.findById(contrat.getAppartement().getId())
+            .orElseThrow(() -> new RuntimeException("Appartement non trouvé"));
+
+        contrat.setLocataire(loc);
+        contrat.setAppartement(appart);
+
         return contratRepository.save(contrat);
     }
 
@@ -40,6 +60,15 @@ public class ContratService {
             contrat.setMontantLoyer(contratDetails.getMontantLoyer());
             contrat.setMontantCharges(contratDetails.getMontantCharges());
             contrat.setStatut(contratDetails.getStatut());
+
+            Locataire loc = locataireRepository.findById(contratDetails.getLocataire().getId())
+                .orElseThrow(() -> new RuntimeException("Locataire non trouvé"));
+            Appartement appart = appartementRepository.findById(contratDetails.getAppartement().getId())
+                .orElseThrow(() -> new RuntimeException("Appartement non trouvé"));
+
+            contrat.setLocataire(loc);
+            contrat.setAppartement(appart);
+
             return contratRepository.save(contrat);
         });
     }

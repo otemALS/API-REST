@@ -89,6 +89,24 @@ public class Contrat {
     public void setStatut(String statut) {
     	this.statut = statut;
     }
+    
+    public Locataire getLocataire() {
+        return locataire;
+    }
+
+    public void setLocataire(Locataire locataire) {
+        this.locataire = locataire;
+    }
+
+    
+    public Appartement getAppartement() {
+        return appartement;
+    }
+
+    public void setAppartement(Appartement appartement) {
+        this.appartement = appartement;
+    }
+
 
     //Relation ManyToOne avec la classe Appartement
     @ManyToOne
@@ -102,6 +120,7 @@ public class Contrat {
     
     //Relation ManyToOne avec la classe Locataire
     @ManyToOne
-    @JoinColumn(name = "locataire")
+    @JoinColumn(name = "locataire_id")
     private Locataire locataire;
+
 }

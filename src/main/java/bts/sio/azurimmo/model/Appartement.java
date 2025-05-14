@@ -1,5 +1,9 @@
 package bts.sio.azurimmo.model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
@@ -27,6 +31,12 @@ public class Appartement {
     @ManyToOne
     @JoinColumn(name = "batiment_id", nullable = false)
     private Batiment batiment;
+    
+    @OneToMany(mappedBy = "appartement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"appartement", "locataire", "garant"})
+    private List<Contrat> contrats;
+
+
 
     // Getter et Setter pour id
     public Long getId() {
@@ -81,4 +91,13 @@ public class Appartement {
     public void setBatiment(Batiment batiment) {
         this.batiment = batiment;
     }
+    
+    public List<Contrat> getContrats() {
+        return contrats;
+    }
+
+    public void setContrats(List<Contrat> contrats) {
+        this.contrats = contrats;
+    }
+
 }
